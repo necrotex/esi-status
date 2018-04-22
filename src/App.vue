@@ -44,7 +44,8 @@ export default {
 
   methods: {
     update: function () {
-      this.endpoints.errors = this.endpoints.warnings = []
+      this.endpoints.errors = []
+      this.endpoints.warnings = []
 
       axios.get('https://esi.tech.ccp.is/status.json?version=latest').then(data => {
         this.reachable = true
