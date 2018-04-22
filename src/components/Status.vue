@@ -1,26 +1,32 @@
 <template>
     <div class="status">
 
-        <div v-if="warnings.length > 0" class="alert alert-warning" role="alert">
-            <p>Following routes are degraded and requests can be slow or dropped:</p>
-            <hr>
-            <div class="endpoint w-100" v-for="warning of warnings" v-bind:key="warning.endpoint">
-                <endpoint v-bind:endpoint="warning"></endpoint>
+        <transition name="fade">
+            <div v-if="warnings.length > 0" class="alert alert-warning" role="alert">
+                <p>Following routes are degraded and requests can be slow or dropped:</p>
+                <hr>
+                <div class="endpoint w-100" v-for="warning of warnings" v-bind:key="warning.route">
+                    <endpoint v-bind:endpoint="warning"></endpoint>
+                </div>
             </div>
-        </div>
+        </transition>
 
-        <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
-            <p>Following routes can be not reachable or very slow to respond:</p>
-            <hr>
-            <div class="endpoint w-100" v-for="error of errors" v-bind:key="error.endpoint">
-                <endpoint v-bind:endpoint="error"></endpoint>
+        <transition name="fade">
+            <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
+                <p>Following routes are not reachable or very slow to respond:</p>
+                <hr>
+                <div class="endpoint w-100" v-for="error of errors" v-bind:key="error.route">
+                    <endpoint v-bind:endpoint="error"></endpoint>
+                </div>
             </div>
-        </div>
+        </transition>
 
-        <div v-if="warnings.length === 0 && errors.length === 0"
-             class="alert alert-success" role="alert">
-            Everything is alright, all routes are reachable!
-        </div>
+        <transition name="fade">
+            <div v-if="warnings.length === 0 && errors.length === 0"
+                 class="alert alert-success" role="alert">
+                No errors or warnings reported!
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -37,11 +43,16 @@ export default {
     warnings: {
       default: []
     }
-  },
-  data: function () {
-    return {}
   }
-
 }
 
 </script>
+
+<style>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 1s;
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0;
+    }
+</style>
